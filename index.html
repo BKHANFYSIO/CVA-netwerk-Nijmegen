@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="CVA Netwerk Nijmegen – Gespecialiseerde zorg en revalidatie na een beroerte. Vind aangesloten zorgverleners in uw regio.">
+  <meta name="keywords" content="CVA, beroerte, revalidatie, Nijmegen, zorgnetwerk, fysiotherapie, neurorevalidatie">
+  <title>CVA Netwerk Nijmegen – Samen voor optimale zorg na een beroerte</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Mobile Overlay -->
+  <div class="mobile-overlay" id="mobileOverlay"></div>
+
+  <!-- ═══ NAVBAR ═══ -->
+  <nav class="navbar" id="navbar">
+    <div class="container">
+      <a href="#welkom" class="nav-brand">
+        <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="24" cy="24" r="22" fill="url(#brandGrad)" opacity="0.12"/>
+          <path d="M24 8C20 8 16.5 10 14.5 13C12.5 10 9 8 5 8" stroke="none" fill="none"/>
+          <g transform="translate(10, 10)">
+            <path d="M14 2C14 2 18 2 22 6C26 10 26 14 26 14C26 14 26 18 22 22C18 26 14 26 14 26C14 26 10 26 6 22C2 18 2 14 2 14C2 14 2 10 6 6C10 2 14 2 14 2Z" fill="url(#brandGrad)" opacity="0.9"/>
+            <circle cx="10" cy="11" r="2.5" fill="white" opacity="0.9"/>
+            <circle cx="18" cy="11" r="2.5" fill="white" opacity="0.9"/>
+            <circle cx="14" cy="18" r="2" fill="white" opacity="0.7"/>
+            <path d="M10 11 L14 15 L18 11" stroke="white" stroke-width="1.2" fill="none" opacity="0.5"/>
+          </g>
+          <defs>
+            <linearGradient id="brandGrad" x1="0" y1="0" x2="48" y2="48">
+              <stop offset="0%" stop-color="#1B6B93"/>
+              <stop offset="100%" stop-color="#4FC0D0"/>
+            </linearGradient>
+          </defs>
+        </svg>
+        <div class="nav-brand-text">
+          CVA Netwerk
+          <span>Nijmegen</span>
+        </div>
+      </a>
+
+      <div class="nav-menu" id="navMenu">
+        <a href="#welkom" class="nav-link active" data-section="welkom">Welkom</a>
+        <a href="#over-ons" class="nav-link" data-section="over-ons">Over Ons</a>
+        
+        <div class="nav-dropdown" id="dropdownVerwijzers">
+          <a class="nav-link nav-dropdown-trigger" data-section="verwijzers">
+            Verwijzers
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </a>
+          <div class="nav-dropdown-menu">
+            <a href="#verwijzers" class="nav-dropdown-item" data-scroll>
+              Informatie voor verwijzers
+              <small>Verwijsmogelijkheden en samenwerkingsrichtlijnen</small>
+            </a>
+            <a href="#verwijzers-links" class="nav-dropdown-item" data-scroll>
+              Handige links
+              <small>Relevante websites voor professionals</small>
+            </a>
+          </div>
+        </div>
+
+        <div class="nav-dropdown" id="dropdownCVA">
+          <a class="nav-link nav-dropdown-trigger" data-section="cva-info">
+            CVA Info
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </a>
+          <div class="nav-dropdown-menu">
+            <a href="#cva-info" class="nav-dropdown-item" data-scroll>
+              Wat is een beroerte?
+              <small>Uitleg over CVA, symptomen en behandeling</small>
+            </a>
+            <a href="#cva-links" class="nav-dropdown-item" data-scroll>
+              Handige links
+              <small>Nuttige websites voor patiënten en mantelzorgers</small>
+            </a>
+          </div>
+        </div>
+
+        <a href="#zorgverleners" class="nav-link" data-section="zorgverleners">Zorgverleners</a>
+        <a href="#contact" class="nav-link" data-section="contact">Contact</a>
+      </div>
+
+      <button class="nav-toggle" id="navToggle" aria-label="Menu openen">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ═══ HERO SECTION ═══ -->
+  <section class="hero" id="welkom">
+    <div class="hero-shapes">
+      <div class="shape shape-1"></div>
+      <div class="shape shape-2"></div>
+      <div class="shape shape-3"></div>
+    </div>
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-badge">
+          <span class="hero-badge-dot"></span>
+          CVA Netwerk Nijmegen e.o.
+        </div>
+        <h1 class="hero-title">
+          Samen voor <span class="highlight">optimale zorg</span> na een beroerte
+        </h1>
+        <p class="hero-description">
+          Wij verbinden gespecialiseerde zorgverleners in de regio Nijmegen voor de beste neurorevalidatie. Voor patiënten, mantelzorgers én professionals.
+        </p>
+        <div class="hero-actions">
+          <a href="#zorgverleners" class="btn btn-primary btn-lg">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            Vind een zorgverlener
+          </a>
+          <a href="#over-ons" class="btn btn-secondary btn-lg">
+            Meer over ons
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="hero-illustration">
+          <div class="circle circle-1"></div>
+          <div class="circle circle-2"></div>
+          <div class="circle circle-3"></div>
+          <svg class="brain-icon" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="100" cy="100" r="80" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+            <g transform="translate(50, 45)">
+              <!-- Simplified brain icon -->
+              <path d="M50 5C35 5 25 15 20 25C15 15 5 10 5 25C5 35 10 40 15 45C10 50 5 60 10 70C15 80 25 85 35 80C30 90 40 100 50 95C60 100 70 90 65 80C75 85 85 80 90 70C95 60 90 50 85 45C90 40 95 35 95 25C95 10 85 15 80 25C75 15 65 5 50 5Z" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.5)" stroke-width="2"/>
+              <path d="M50 20 L50 85" stroke="rgba(255,255,255,0.3)" stroke-width="1.5" stroke-dasharray="4 4"/>
+              <circle cx="35" cy="35" r="6" fill="rgba(255,255,255,0.2)" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
+              <circle cx="65" cy="35" r="6" fill="rgba(255,255,255,0.2)" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
+              <circle cx="30" cy="60" r="5" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+              <circle cx="70" cy="60" r="5" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+              <circle cx="50" cy="50" r="8" fill="rgba(240,165,0,0.3)" stroke="rgba(240,165,0,0.6)" stroke-width="1.5"/>
+            </g>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ STATS BAR ═══ -->
+  <div class="stats-bar">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat-card fade-up">
+          <div class="stat-number">20+</div>
+          <div class="stat-label">Jaar ervaring</div>
+        </div>
+        <div class="stat-card fade-up delay-1">
+          <div class="stat-number">12+</div>
+          <div class="stat-label">Aangesloten praktijken</div>
+        </div>
+        <div class="stat-card fade-up delay-2">
+          <div class="stat-number">100%</div>
+          <div class="stat-label">Gespecialiseerd in CVA</div>
+        </div>
+        <div class="stat-card fade-up delay-3">
+          <div class="stat-number">Regio</div>
+          <div class="stat-label">Nijmegen en omstreken</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ OVER ONS SECTION ═══ -->
+  <section class="section" id="over-ons">
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-content fade-up">
+          <span class="section-label">Over Ons</span>
+          <h2 class="section-title">Onze Missie & Visie</h2>
+          <p class="about-text">
+            Het CVA Netwerk Nijmegen is in 2005 opgericht door de afdeling fysiotherapie van het Canisius-Wilhelmina Ziekenhuis. Ons netwerk bestaat uit gespecialiseerde zorgverleners die zich dagelijks inzetten voor mensen met een beroerte.
+          </p>
+          <p class="about-text">
+            Onze missie is het bieden van <strong>hoogwaardige, patiëntgerichte neurorevalidatie</strong> door middel van kennisdeling, samenwerking en innovatie. Wij geloven dat goede zorg ontstaat wanneer professionals samenwerken en kennis delen.
+          </p>
+          
+          <div class="about-features">
+            <div class="about-feature">
+              <div class="about-feature-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+              </div>
+              <div>
+                <h4>Evidence-based</h4>
+                <p>Behandelingen gebaseerd op de nieuwste wetenschappelijke inzichten</p>
+              </div>
+            </div>
+            <div class="about-feature">
+              <div class="about-feature-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              </div>
+              <div>
+                <h4>Multidisciplinair</h4>
+                <p>Samenwerking tussen diverse zorgdisciplines</p>
+              </div>
+            </div>
+            <div class="about-feature">
+              <div class="about-feature-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+              </div>
+              <div>
+                <h4>Kwaliteitsgedreven</h4>
+                <p>Continue verbetering van onze zorgstandaarden</p>
+              </div>
+            </div>
+            <div class="about-feature">
+              <div class="about-feature-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+              </div>
+              <div>
+                <h4>Patiëntgericht</h4>
+                <p>De patiënt staat altijd centraal in onze aanpak</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="about-visual fade-up delay-2">
+          <div class="about-image-wrapper">
+            <div id="aboutImage" style="width: 100%; height: 400px; background: linear-gradient(135deg, #1B6B9320, #4FC0D020); display: flex; align-items: center; justify-content: center; border-radius: var(--radius-2xl);">
+              <svg width="120" height="120" viewBox="0 0 120 120" fill="none"><circle cx="60" cy="60" r="50" stroke="#1B6B93" stroke-width="2" opacity="0.3"/><circle cx="60" cy="60" r="35" stroke="#4FC0D0" stroke-width="2" opacity="0.3"/><g transform="translate(35,30)"><path d="M25 5C18 5 12 10 10 16C7 10 2 8 2 16C2 22 5 25 8 28C5 32 2 38 5 44C8 50 14 52 20 50C18 55 23 60 28 58C33 60 38 55 36 50C42 52 48 50 50 44C53 38 50 32 48 28C50 25 53 22 53 16C53 8 48 10 45 16C43 10 37 5 25 5Z" fill="#1B6B93" opacity="0.15" stroke="#1B6B93" stroke-width="1.5" opacity="0.4"/></g></svg>
+            </div>
+          </div>
+          <div class="about-image-decoration"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ VOOR VERWIJZERS SECTION ═══ -->
+  <section class="section section-alt" id="verwijzers">
+    <div class="container">
+      <div class="section-header fade-up">
+        <span class="section-label">Voor Professionals</span>
+        <h2 class="section-title">Voor Verwijzers en Professionals</h2>
+        <p class="section-subtitle">Informatie over verwijsmogelijkheden, samenwerkingsrichtlijnen en handige bronnen voor zorgprofessionals.</p>
+      </div>
+
+      <div class="info-grid">
+        <div class="info-card fade-up">
+          <div class="info-card-header">
+            <h3>Verwijsinformatie</h3>
+            <p>Hoe verwijst u naar het CVA Netwerk?</p>
+          </div>
+          <div class="info-card-body">
+            <div class="accordion-item open">
+              <button class="accordion-trigger" aria-expanded="true">
+                Verwijscriteria
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <div class="accordion-content" style="max-height: 500px;">
+                <div class="accordion-content-inner">
+                  <p>Het CVA Netwerk Nijmegen biedt gespecialiseerde zorg voor patiënten die een beroerte (CVA) hebben gehad. Verwijzing is mogelijk voor:</p>
+                  <ul>
+                    <li>Patiënten in de acute fase na ontslag uit het ziekenhuis</li>
+                    <li>Patiënten in de revalidatiefase die baat hebben bij gespecialiseerde behandeling</li>
+                    <li>Patiënten in de chronische fase met restklachten</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="accordion-item">
+              <button class="accordion-trigger" aria-expanded="false">
+                Werkwijze van het netwerk
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <div class="accordion-content">
+                <div class="accordion-content-inner">
+                  <p>Na een verwijzing wordt de patiënt gekoppeld aan een gespecialiseerde zorgverlener in de buurt. Onze aangesloten zorgverleners werken volgens de laatst geldende richtlijnen en protocollen.</p>
+                  <p>Wij streven naar korte lijnen en goede communicatie met verwijzers om de continuïteit van zorg te waarborgen.</p>
+                </div>
+              </div>
+            </div>
+            <div class="accordion-item">
+              <button class="accordion-trigger" aria-expanded="false">
+                Scholing en bijscholing
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <div class="accordion-content">
+                <div class="accordion-content-inner">
+                  <p>De leden van het CVA Netwerk volgen regelmatig bij- en nascholing op het gebied van neurorevalidatie. Wij organiseren ook gezamenlijke scholingsbijeenkomsten waar verwijzers welkom zijn.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="fade-up delay-1" id="verwijzers-links">
+          <div style="margin-bottom: var(--space-6);">
+            <h3 style="font-size: var(--font-size-xl); font-weight: 600; margin-bottom: var(--space-2);">Handige Links</h3>
+            <p style="font-size: var(--font-size-sm); color: var(--color-text-secondary);">Relevante bronnen voor verwijzers en professionals</p>
+          </div>
+          <div class="links-list" id="verwijzersLinksList">
+            <!-- Dynamisch gevuld via JavaScript -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ VOOR CVA SECTION ═══ -->
+  <section class="section" id="cva-info">
+    <div class="container">
+      <div class="section-header fade-up">
+        <span class="section-label">Informatie</span>
+        <h2 class="section-title">Voor iemand met een CVA</h2>
+        <p class="section-subtitle">Begrijpelijke informatie over beroerte, herstel en het leven daarna. Voor patiënten en hun naasten.</p>
+      </div>
+
+      <div class="info-grid">
+        <div class="fade-up">
+          <!-- Articles rendered here -->
+          <div id="articlesContainer">
+            <!-- Dynamisch gevuld via JavaScript -->
+          </div>
+        </div>
+
+        <div class="fade-up delay-1" id="cva-links">
+          <div style="margin-bottom: var(--space-6);">
+            <h3 style="font-size: var(--font-size-xl); font-weight: 600; margin-bottom: var(--space-2);">Handige Links</h3>
+            <p style="font-size: var(--font-size-sm); color: var(--color-text-secondary);">Nuttige websites voor patiënten en mantelzorgers</p>
+          </div>
+          <div class="links-list" id="cvaLinksList">
+            <!-- Dynamisch gevuld via JavaScript -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ ZORGVERLENERS SECTION ═══ -->
+  <section class="section section-alt" id="zorgverleners">
+    <div class="container">
+      <div class="section-header fade-up">
+        <span class="section-label">Zoek zorgverlener</span>
+        <h2 class="section-title">Aangesloten Zorgverleners</h2>
+        <p class="section-subtitle">Vind een gespecialiseerde zorgverlener bij u in de buurt. Zoek op naam of postcode.</p>
+      </div>
+
+      <div class="search-wrapper fade-up">
+        <div class="search-bar" id="searchBar">
+          <div class="search-input-group">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            <input type="text" id="searchName" placeholder="Zoek op naam of specialisme..." aria-label="Zoek op naam of specialisme">
+          </div>
+          <div class="search-divider"></div>
+          <div class="search-postcode">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            <input type="text" id="searchPostcode" placeholder="Postcode" aria-label="Postcode" maxlength="6">
+          </div>
+          <button class="search-btn" id="searchBtn">Zoeken</button>
+        </div>
+        <p class="search-info">Zoekresultaten worden gefilterd op een straal van 5 km rond de ingevoerde postcode</p>
+      </div>
+
+      <div class="results-count" id="resultsCount"></div>
+      <div class="providers-grid" id="providersGrid">
+        <!-- Dynamisch gevuld via JavaScript -->
+      </div>
+      <div class="no-results" id="noResults" style="display: none;">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/><path d="m8 8 6 6"/></svg>
+        <h3>Geen resultaten gevonden</h3>
+        <p>Probeer een andere zoekterm of postcode, of verwijder het filter om alle zorgverleners te bekijken.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ CONTACT SECTION ═══ -->
+  <section class="section" id="contact">
+    <div class="container">
+      <div class="contact-grid">
+        <div class="contact-info fade-up">
+          <span class="section-label">Contact</span>
+          <h2 class="section-title">Neem contact op</h2>
+          <p>Heeft u een vraag over het CVA Netwerk Nijmegen? Wilt u meer informatie of een samenwerking bespreken? Neem gerust contact met ons op via het formulier.</p>
+          
+          <div class="contact-methods">
+            <div class="contact-method">
+              <div class="contact-method-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              </div>
+              <div>
+                <h4>E-mail</h4>
+                <a href="mailto:info@cvanetwerknijmegen.nl">info@cvanetwerknijmegen.nl</a>
+              </div>
+            </div>
+            <div class="contact-method">
+              <div class="contact-method-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              </div>
+              <div>
+                <h4>Regio</h4>
+                <p>Nijmegen en omstreken</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="contact-form-wrapper fade-up delay-1">
+          <form id="contactForm">
+            <div class="form-group">
+              <label for="contactNaam" class="form-label">Naam *</label>
+              <input type="text" id="contactNaam" class="form-input" placeholder="Uw volledige naam" required>
+              <p class="form-error">Vul uw naam in</p>
+            </div>
+            <div class="form-group">
+              <label for="contactEmail" class="form-label">E-mailadres *</label>
+              <input type="email" id="contactEmail" class="form-input" placeholder="uw@email.nl" required>
+              <p class="form-error">Vul een geldig e-mailadres in</p>
+            </div>
+            <div class="form-group">
+              <label for="contactOnderwerp" class="form-label">Onderwerp</label>
+              <input type="text" id="contactOnderwerp" class="form-input" placeholder="Waar gaat uw bericht over?">
+            </div>
+            <div class="form-group">
+              <label for="contactBericht" class="form-label">Bericht *</label>
+              <textarea id="contactBericht" class="form-textarea" placeholder="Typ hier uw bericht..." required></textarea>
+              <p class="form-error">Vul een bericht in</p>
+            </div>
+            <button type="submit" class="btn btn-solid btn-lg form-submit">
+              Verstuur bericht
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            </button>
+          </form>
+          <div class="form-success" id="formSuccess">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            <h3>Bericht verzonden!</h3>
+            <p>Bedankt voor uw bericht. Wij nemen zo snel mogelijk contact met u op.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ FOOTER ═══ -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-brand">
+            <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="24" cy="24" r="22" fill="rgba(79,192,208,0.15)"/>
+              <g transform="translate(10, 10)">
+                <path d="M14 2C14 2 18 2 22 6C26 10 26 14 26 14C26 14 26 18 22 22C18 26 14 26 14 26C14 26 10 26 6 22C2 18 2 14 2 14C2 14 2 10 6 6C10 2 14 2 14 2Z" fill="rgba(79,192,208,0.4)"/>
+                <circle cx="10" cy="11" r="2.5" fill="white" opacity="0.7"/>
+                <circle cx="18" cy="11" r="2.5" fill="white" opacity="0.7"/>
+                <circle cx="14" cy="18" r="2" fill="white" opacity="0.5"/>
+              </g>
+            </svg>
+            CVA Netwerk Nijmegen
+          </div>
+          <p class="footer-description">
+            Gespecialiseerd zorgnetwerk voor optimale neurorevalidatie na een beroerte. Samen werken we aan de beste zorg in de regio Nijmegen.
+          </p>
+        </div>
+        <div>
+          <h4>Navigatie</h4>
+          <div class="footer-links">
+            <a href="#welkom">Welkom</a>
+            <a href="#over-ons">Over Ons</a>
+            <a href="#verwijzers">Voor Verwijzers</a>
+            <a href="#cva-info">CVA Informatie</a>
+            <a href="#zorgverleners">Zorgverleners</a>
+          </div>
+        </div>
+        <div>
+          <h4>Informatie</h4>
+          <div class="footer-links">
+            <a href="#cva-info">Wat is een beroerte?</a>
+            <a href="#cva-links">Handige links</a>
+            <a href="#contact">Contact</a>
+          </div>
+        </div>
+        <div>
+          <h4>Contact</h4>
+          <div class="footer-links">
+            <a href="mailto:info@cvanetwerknijmegen.nl">info@cvanetwerknijmegen.nl</a>
+            <a href="#contact">Contactformulier</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 CVA Netwerk Nijmegen. Alle rechten voorbehouden.</p>
+        <p>Gemaakt met zorg voor de regio</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="data/zorgverleners.js"></script>
+  <script src="data/articles.js"></script>
+  <script src="data/links.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/zorgverleners.js"></script>
+  <script src="js/contact.js"></script>
+</body>
+</html>

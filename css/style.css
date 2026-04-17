@@ -1138,6 +1138,15 @@ ul, ol {
   padding: var(--space-2) var(--space-3);
 }
 
+.search-status[hidden] {
+  display: none;
+}
+
+.search-status--warning {
+  color: #8A3D1A;
+  background: rgba(240, 165, 0, 0.15);
+}
+
 .providers-map-wrapper {
   margin: 0 auto var(--space-8);
   max-width: 960px;
@@ -1190,6 +1199,14 @@ ul, ol {
   color: var(--color-primary);
 }
 
+.results-count-note {
+  display: block;
+  margin-top: var(--space-2);
+  font-size: var(--font-size-xs);
+  font-weight: 500;
+  color: var(--color-text-light);
+}
+
 .providers-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
@@ -1213,8 +1230,21 @@ ul, ol {
 .provider-card-header {
   display: flex;
   align-items: flex-start;
+  justify-content: space-between;
   gap: var(--space-4);
   margin-bottom: var(--space-4);
+}
+
+.provider-card-header-left {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-4);
+  min-width: 0;
+  flex: 1;
+}
+
+.provider-card-titles {
+  min-width: 0;
 }
 
 .provider-avatar {
@@ -1273,17 +1303,47 @@ ul, ol {
   text-decoration: underline;
 }
 
-.provider-distance {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-1);
-  padding: var(--space-1) var(--space-3);
-  background: rgba(27, 107, 147, 0.08);
-  border-radius: var(--radius-full);
-  font-size: var(--font-size-xs);
+.provider-distance-badge {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-lg);
+  background: linear-gradient(135deg, rgba(27, 107, 147, 0.12), rgba(79, 192, 208, 0.18));
+  border: 1px solid rgba(27, 107, 147, 0.2);
+  text-align: right;
+}
+
+.provider-distance-badge-km {
+  font-size: var(--font-size-lg);
+  font-weight: 700;
   color: var(--color-primary);
-  font-weight: 500;
-  margin-top: var(--space-2);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.provider-distance-badge-hint {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-text-secondary);
+}
+
+@media (max-width: 420px) {
+  .provider-card-header {
+    flex-wrap: wrap;
+  }
+
+  .provider-distance-badge {
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    text-align: left;
+  }
 }
 
 .no-results {

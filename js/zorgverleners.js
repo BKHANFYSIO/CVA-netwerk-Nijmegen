@@ -91,6 +91,7 @@ function performSearch() {
     const postcodeInput = parsePostcode(rawPostcode);
     let userCoords = null;
     let shouldShowDistance = false;
+    let postcodeSearchState = 'none';
     let results = [...zorgverleners];
 
     if (nameQuery) {
@@ -104,12 +105,15 @@ function performSearch() {
 
     if (postcodeInput.normalized.length > 0) {
         if (!postcodeInput.hasValidPrefix) {
+            postcodeSearchState = 'invalid';
             setSearchStatus('Voer een geldige postcode in (bijvoorbeeld 6511 of 6511AB).', true);
         } else {
             userCoords = resolvePostcodeCoordinates(postcodeInput.numericPart);
             if (!userCoords) {
+                postcodeSearchState = 'unknown';
                 setSearchStatus('Deze postcode is nog niet beschikbaar in de prototype-dataset.', true);
             } else {
+                postcodeSearchState = 'active';
                 shouldShowDistance = true;
                 results = results
                     .map(provider => ({
@@ -119,14 +123,14 @@ function performSearch() {
                     .filter(provider => provider.distance <= radiusKm)
                     .sort((left, right) => left.distance - right.distance);
 
-                setSearchStatus(`Afstand wordt hemelsbreed berekend binnen ${radiusKm} km rond postcode ${postcodeInput.numericPart}.`, false);
+                setSearchStatus('', false);
             }
         }
     } else {
-        setSearchStatus('Afstand wordt hemelsbreed berekend vanaf het midden van de postcode.', false);
+        setSearchStatus('', false);
     }
 
-    setSearchInfo(radiusKm);
+    updateSearchGuidance(radiusKm, postcodeInput, postcodeSearchState);
     renderProviders(results, shouldShowDistance, radiusKm);
     updateProvidersMap(results, userCoords, shouldShowDistance ? radiusKm : null);
 }
@@ -151,11 +155,32 @@ function resolvePostcodeCoordinates(postcodeNumericPart) {
     return postcodeCoords[postcodeNumericPart] || null;
 }
 
-function setSearchInfo(radiusKm) {
+function updateSearchGuidance(radiusKm, postcodeInput, postcodeSearchState) {
     const info = document.getElementById('searchInfo');
-    if (info) {
-        info.textContent = `Zoekresultaten worden gefilterd op een straal van ${radiusKm} km rond de ingevoerde postcode`;
+    if (!info) {
+        return;
     }
+
+    if (postcodeSearchState === 'invalid') {
+        info.textContent = 'Vul een geldige Nederlandse postcode in (1234 of 1234AB). Daarna filteren we op de gekozen straal.';
+        return;
+    }
+
+    if (postcodeSearchState === 'unknown') {
+        info.textContent = 'Deze postcode staat nog niet in onze demogegevens. Probeer een andere postcode of wis het veld om alle zorgverleners te tonen.';
+        return;
+    }
+
+    if (postcodeSearchState === 'active') {
+        info.textContent =
+            `Resultaten binnen ${radiusKm} km van postcode ${postcodeInput.numericPart}. ` +
+            'Alleen zorgverleners binnen die straal, gesorteerd van dichtbij naar ver. Afstand is hemelsbreed (rechte lijn).';
+        return;
+    }
+
+    info.textContent =
+        `Vul een postcode in om te filteren op afstand. Kies de straal hieronder (${radiusKm} km is de standaard). ` +
+        'Zonder postcode zie je alle zorgverleners (eventueel gefilterd op naam). Afstand wordt hemelsbreed berekend.';
 }
 
 function setSearchStatus(message, isWarning) {
@@ -165,8 +190,8 @@ function setSearchStatus(message, isWarning) {
     }
 
     status.textContent = message;
-    status.style.color = isWarning ? '#8A3D1A' : '';
-    status.style.background = isWarning ? 'rgba(240, 165, 0, 0.15)' : '';
+    status.hidden = message.length === 0;
+    status.classList.toggle('search-status--warning', isWarning && message.length > 0);
 }
 
 // Haversine formula to calculate distance between two points in km.
@@ -286,13 +311,20 @@ function renderProviders(providers, showDistance = false, radiusKm = DEFAULT_RAD
         grid.innerHTML = '';
         grid.style.display = 'none';
         noResults.style.display = 'block';
-        resultsCount.innerHTML = `<strong>0</strong> zorgverleners gevonden binnen ${radiusKm} km`;
+        const zeroNote = showDistance
+            ? `<span class="results-count-note">Geen resultaten binnen ${radiusKm} km. Probeer een grotere straal of een andere postcode.</span>`
+            : '';
+        resultsCount.innerHTML = `<strong>0</strong> zorgverleners gevonden${zeroNote}`;
         return;
     }
 
     noResults.style.display = 'none';
     grid.style.display = 'grid';
-    resultsCount.innerHTML = `<strong>${providers.length}</strong> zorgverlener${providers.length !== 1 ? 's' : ''} gevonden`;
+    const sortNote = showDistance
+        ? `<span class="results-count-note">Gesorteerd op afstand: dichtbij eerst · binnen ${radiusKm} km</span>`
+        : '';
+    resultsCount.innerHTML =
+        `<strong>${providers.length}</strong> zorgverlener${providers.length !== 1 ? 's' : ''} gevonden${sortNote}`;
 
     grid.innerHTML = providers.map(provider => {
         const initials = provider.naam
@@ -303,21 +335,25 @@ function renderProviders(providers, showDistance = false, radiusKm = DEFAULT_RAD
             .substring(0, 2)
             .toUpperCase();
 
-        const distanceHtml = showDistance && provider.distance !== undefined
-            ? `<div class="provider-distance">
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-          ${provider.distance.toFixed(1)} km
+        const distanceBadge =
+            showDistance && provider.distance !== undefined
+                ? `<div class="provider-distance-badge" title="Afstand hemelsbreed tot het postcodegebied">
+          <span class="provider-distance-badge-km">${provider.distance.toFixed(1)} km</span>
+          <span class="provider-distance-badge-hint">hemelsbreed</span>
         </div>`
-            : '';
+                : '';
 
         return `
       <div class="provider-card fade-up">
         <div class="provider-card-header">
-          <div class="provider-avatar">${initials}</div>
-          <div>
-            <h4>${provider.naam}</h4>
-            <div class="provider-specialisme">${provider.specialisme}</div>
+          <div class="provider-card-header-left">
+            <div class="provider-avatar">${initials}</div>
+            <div class="provider-card-titles">
+              <h4>${provider.naam}</h4>
+              <div class="provider-specialisme">${provider.specialisme}</div>
+            </div>
           </div>
+          ${distanceBadge}
         </div>
         <div class="provider-details">
           <div class="provider-detail">
@@ -340,7 +376,6 @@ function renderProviders(providers, showDistance = false, radiusKm = DEFAULT_RAD
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
             <a href="${provider.website}" target="_blank" rel="noopener noreferrer">Website bezoeken</a>
           </div>
-          ${distanceHtml}
         </div>
       </div>
     `;

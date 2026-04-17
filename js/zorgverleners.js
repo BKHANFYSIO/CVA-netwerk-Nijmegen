@@ -15,8 +15,8 @@ document.addEventListener('DOMContentLoaded', () => {
     initProviderSearch();
 });
 
-// Nederlandse postcode naar lat/lng mapping (subset voor demo)
-// In productie kan dit worden aangevuld met een geocode API.
+// Nederlandse postcode (vier cijfers) naar benaderingspunt lat/lng — regio Nijmegen e.o.
+// Later uit te breiden met een landelijke geocode-service.
 const postcodeCoords = {
     '6500': { lat: 51.8426, lng: 5.8580 },
     '6501': { lat: 51.8490, lng: 5.8620 },
@@ -106,12 +106,10 @@ function performSearch() {
     if (postcodeInput.normalized.length > 0) {
         if (!postcodeInput.hasValidPrefix) {
             postcodeSearchState = 'invalid';
-            setSearchStatus('Voer een geldige postcode in (bijvoorbeeld 6511 of 6511AB).', true);
         } else {
             userCoords = resolvePostcodeCoordinates(postcodeInput.numericPart);
             if (!userCoords) {
                 postcodeSearchState = 'unknown';
-                setSearchStatus('Deze postcode is nog niet beschikbaar in de prototype-dataset.', true);
             } else {
                 postcodeSearchState = 'active';
                 shouldShowDistance = true;
@@ -122,12 +120,8 @@ function performSearch() {
                     }))
                     .filter(provider => provider.distance <= radiusKm)
                     .sort((left, right) => left.distance - right.distance);
-
-                setSearchStatus('', false);
             }
         }
-    } else {
-        setSearchStatus('', false);
     }
 
     updateSearchGuidance(radiusKm, postcodeInput, postcodeSearchState);
@@ -161,13 +155,21 @@ function updateSearchGuidance(radiusKm, postcodeInput, postcodeSearchState) {
         return;
     }
 
+    info.classList.remove('search-info--warning');
+
     if (postcodeSearchState === 'invalid') {
-        info.textContent = 'Vul een geldige Nederlandse postcode in (1234 of 1234AB). Daarna filteren we op de gekozen straal.';
+        info.classList.add('search-info--warning');
+        info.textContent =
+            'Dit is geen geldige postcode. Gebruik vier cijfers, eventueel met twee letters (bijvoorbeeld 6511 of 6511AB). ' +
+            'Daarna filteren we op de gekozen straal.';
         return;
     }
 
     if (postcodeSearchState === 'unknown') {
-        info.textContent = 'Deze postcode staat nog niet in onze demogegevens. Probeer een andere postcode of wis het veld om alle zorgverleners te tonen.';
+        info.classList.add('search-info--warning');
+        info.textContent =
+            'Dit postcodegebied (vier cijfers) staat nog niet in onze zoeker. ' +
+            'Probeer een postcode uit de regio Nijmegen (bijvoorbeeld 6511 of 6524) of wis het veld om alle zorgverleners te tonen.';
         return;
     }
 
@@ -181,17 +183,6 @@ function updateSearchGuidance(radiusKm, postcodeInput, postcodeSearchState) {
     info.textContent =
         `Vul een postcode in om te filteren op afstand. Kies de straal hieronder (${radiusKm} km is de standaard). ` +
         'Zonder postcode zie je alle zorgverleners (eventueel gefilterd op naam). Afstand wordt hemelsbreed berekend.';
-}
-
-function setSearchStatus(message, isWarning) {
-    const status = document.getElementById('searchStatus');
-    if (!status) {
-        return;
-    }
-
-    status.textContent = message;
-    status.hidden = message.length === 0;
-    status.classList.toggle('search-status--warning', isWarning && message.length > 0);
 }
 
 // Haversine formula to calculate distance between two points in km.

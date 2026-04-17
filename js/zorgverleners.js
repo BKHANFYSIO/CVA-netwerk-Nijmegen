@@ -17,6 +17,9 @@ let gpsCoords = null;
 /** Eenmalige melding na mislukte locatiebepaling (wordt in updateSearchGuidance getoond en gewist). */
 let geolocationNotice = null;
 
+/** Na reset: kaart één keer op vaste overzichtspositie i.p.v. strak op markers inzoomen. */
+let useDefaultMapFrameOnce = false;
+
 document.addEventListener('DOMContentLoaded', () => {
     initProviderSearch();
 });
@@ -189,14 +192,38 @@ function applyRadiusFilterAndSort(providerList, userCoords, radiusKm) {
         .sort((left, right) => left.distance - right.distance);
 }
 
+function resetProviderSearch() {
+    const searchName = document.getElementById('searchName');
+    const searchPostcode = document.getElementById('searchPostcode');
+    const searchRadius = document.getElementById('searchRadius');
+
+    if (searchName) {
+        searchName.value = '';
+    }
+
+    if (searchPostcode) {
+        searchPostcode.value = '';
+    }
+
+    if (searchRadius) {
+        searchRadius.value = String(DEFAULT_RADIUS_KM);
+    }
+
+    gpsCoords = null;
+    geolocationNotice = null;
+    useDefaultMapFrameOnce = true;
+    performSearch();
+}
+
 function initProviderSearch() {
     const searchBtn = document.getElementById('searchBtn');
     const searchName = document.getElementById('searchName');
     const searchPostcode = document.getElementById('searchPostcode');
     const searchRadius = document.getElementById('searchRadius');
     const searchLocateBtn = document.getElementById('searchLocateBtn');
+    const searchResetBtn = document.getElementById('searchResetBtn');
 
-    if (!searchBtn || !searchName || !searchPostcode || !searchRadius || !searchLocateBtn) {
+    if (!searchBtn || !searchName || !searchPostcode || !searchRadius || !searchLocateBtn || !searchResetBtn) {
         return;
     }
 
@@ -220,6 +247,7 @@ function initProviderSearch() {
     searchPostcode.addEventListener('input', performSearch);
     searchRadius.addEventListener('change', performSearch);
     searchLocateBtn.addEventListener('click', requestUserLocation);
+    searchResetBtn.addEventListener('click', resetProviderSearch);
 
     performSearch();
 }
@@ -502,7 +530,10 @@ function updateProvidersMap(providers, userCoords, radiusKm, postcodeSearchState
         mapBounds.push([provider.lat, provider.lng]);
     });
 
-    if (mapBounds.length > 0) {
+    if (useDefaultMapFrameOnce && !userCoords) {
+        useDefaultMapFrameOnce = false;
+        providersMap.setView([DEFAULT_MAP_CENTER.lat, DEFAULT_MAP_CENTER.lng], DEFAULT_MAP_ZOOM);
+    } else if (mapBounds.length > 0) {
         providersMap.fitBounds(mapBounds, { padding: [32, 32], maxZoom: 14 });
     } else {
         providersMap.setView([DEFAULT_MAP_CENTER.lat, DEFAULT_MAP_CENTER.lng], DEFAULT_MAP_ZOOM);

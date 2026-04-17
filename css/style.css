@@ -1119,6 +1119,32 @@ ul, ol {
   flex-shrink: 0;
 }
 
+.search-reset-btn {
+  flex-shrink: 0;
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: transparent;
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: background var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
+  white-space: nowrap;
+}
+
+.search-reset-btn:hover {
+  background: rgba(27, 107, 147, 0.06);
+  border-color: var(--color-text-light);
+  color: var(--color-primary);
+}
+
+.search-reset-btn:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
 .search-radius {
   display: flex;
   align-items: center;
@@ -1843,6 +1869,15 @@ ul, ol {
     width: 100%;
     justify-content: center;
     padding: var(--space-3);
+  }
+
+  .search-reset-btn {
+    width: 100%;
+    order: 10;
+  }
+
+  .search-btn {
+    width: 100%;
   }
 
   #providersMap {

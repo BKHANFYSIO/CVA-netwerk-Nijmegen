@@ -1,0 +1,16 @@
+<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="24" cy="24" r="22" fill="url(#brandGrad)" opacity="0.12"/>
+  <g transform="translate(10, 10)">
+    <path d="M14 2C14 2 18 2 22 6C26 10 26 14 26 14C26 14 26 18 22 22C18 26 14 26 14 26C14 26 10 26 6 22C2 18 2 14 2 14C2 14 2 10 6 6C10 2 14 2 14 2Z" fill="url(#brandGrad)" opacity="0.9"/>
+    <circle cx="10" cy="11" r="2.5" fill="white" opacity="0.9"/>
+    <circle cx="18" cy="11" r="2.5" fill="white" opacity="0.9"/>
+    <circle cx="14" cy="18" r="2" fill="white" opacity="0.7"/>
+    <path d="M10 11 L14 15 L18 11" stroke="white" stroke-width="1.2" fill="none" opacity="0.5"/>
+  </g>
+  <defs>
+    <linearGradient id="brandGrad" x1="0" y1="0" x2="48" y2="48">
+      <stop offset="0%" stop-color="#1B6B93"/>
+      <stop offset="100%" stop-color="#4FC0D0"/>
+    </linearGradient>
+  </defs>
+</svg>

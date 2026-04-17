@@ -150,27 +150,50 @@ function initScrollAnimations() {
 }
 
 /* ── Accordion ── */
-function initAccordions() {
-    document.querySelectorAll('.accordion-trigger').forEach(trigger => {
-        trigger.addEventListener('click', () => {
-            const item = trigger.closest('.accordion-item');
-            const content = item.querySelector('.accordion-content');
-            const isOpen = item.classList.contains('open');
+function handleAccordionClick(event) {
+    const trigger = event.currentTarget;
+    const item = trigger.closest('.accordion-item');
+    if (!item) {
+        return;
+    }
 
-            // Close siblings in the same group
-            const parent = item.parentElement;
-            parent.querySelectorAll('.accordion-item').forEach(sibling => {
-                sibling.classList.remove('open');
-                sibling.querySelector('.accordion-trigger').setAttribute('aria-expanded', 'false');
-                sibling.querySelector('.accordion-content').style.maxHeight = '0';
-            });
+    const content = item.querySelector('.accordion-content');
+    if (!content) {
+        return;
+    }
 
-            if (!isOpen) {
-                item.classList.add('open');
-                trigger.setAttribute('aria-expanded', 'true');
-                content.style.maxHeight = content.scrollHeight + 'px';
-            }
+    const isOpen = item.classList.contains('open');
+    const parent = item.parentElement;
+    if (!parent) {
+        return;
+    }
+
+    parent.querySelectorAll('.accordion-item').forEach(sibling => {
+        sibling.classList.remove('open');
+        const siblingTrigger = sibling.querySelector('.accordion-trigger');
+        const siblingContent = sibling.querySelector('.accordion-content');
+        if (siblingTrigger) {
+            siblingTrigger.setAttribute('aria-expanded', 'false');
+        }
+        if (siblingContent) {
+            siblingContent.style.maxHeight = '0';
+        }
+    });
+
+    if (!isOpen) {
+        item.classList.add('open');
+        trigger.setAttribute('aria-expanded', 'true');
+        requestAnimationFrame(() => {
+            content.style.maxHeight = `${content.scrollHeight}px`;
         });
+    }
+}
+
+/** Bindt alleen triggers die nog geen listener hebben (voorkomt dubbele init na renderArticles). */
+function initAccordions(root = document) {
+    root.querySelectorAll('.accordion-trigger:not([data-accordion-bound])').forEach(trigger => {
+        trigger.setAttribute('data-accordion-bound', 'true');
+        trigger.addEventListener('click', handleAccordionClick);
     });
 }
 
@@ -221,6 +244,5 @@ function renderArticles() {
     </div>
   `).join('');
 
-    // Re-init accordions for the new content
-    initAccordions();
+    initAccordions(container);
 }

@@ -1,6 +1,6 @@
 /* ============================================
    CVA Netwerk Nijmegen – Zorgverleners Zoekfunctie
-   Met postcode-gebaseerde hemelsbrede afstand
+   Hemelsbrede afstand vanaf postcode of GPS-locatie
    ============================================ */
 
 const DEFAULT_RADIUS_KM = 5;
@@ -10,6 +10,12 @@ const DEFAULT_MAP_ZOOM = 11;
 let providersMap = null;
 let mapLayerGroup = null;
 let isMapAvailable = false;
+
+/** Laatst geslaagde GPS-positie (alleen in het geheugen van deze pagina). */
+let gpsCoords = null;
+
+/** Eenmalige melding na mislukte locatiebepaling (wordt in updateSearchGuidance getoond en gewist). */
+let geolocationNotice = null;
 
 document.addEventListener('DOMContentLoaded', () => {
     initProviderSearch();
@@ -173,13 +179,24 @@ const postcodeCoords = {
     '6988': { lat: 51.9980, lng: 6.0820 },
 };
 
+function applyRadiusFilterAndSort(providerList, userCoords, radiusKm) {
+    return providerList
+        .map(provider => ({
+            ...provider,
+            distance: haversineDistance(userCoords.lat, userCoords.lng, provider.lat, provider.lng),
+        }))
+        .filter(provider => provider.distance <= radiusKm)
+        .sort((left, right) => left.distance - right.distance);
+}
+
 function initProviderSearch() {
     const searchBtn = document.getElementById('searchBtn');
     const searchName = document.getElementById('searchName');
     const searchPostcode = document.getElementById('searchPostcode');
     const searchRadius = document.getElementById('searchRadius');
+    const searchLocateBtn = document.getElementById('searchLocateBtn');
 
-    if (!searchBtn || !searchName || !searchPostcode || !searchRadius) {
+    if (!searchBtn || !searchName || !searchPostcode || !searchRadius || !searchLocateBtn) {
         return;
     }
 
@@ -200,9 +217,74 @@ function initProviderSearch() {
     });
 
     searchName.addEventListener('input', performSearch);
+    searchPostcode.addEventListener('input', performSearch);
     searchRadius.addEventListener('change', performSearch);
+    searchLocateBtn.addEventListener('click', requestUserLocation);
 
     performSearch();
+}
+
+function requestUserLocation() {
+    const locateButton = document.getElementById('searchLocateBtn');
+    if (!locateButton) {
+        return;
+    }
+
+    if (!navigator.geolocation) {
+        geolocationNotice = {
+            text: 'Locatiebepaling wordt door deze browser niet ondersteund. Vul een postcode in.',
+            warning: true,
+        };
+        performSearch();
+        return;
+    }
+
+    locateButton.disabled = true;
+
+    navigator.geolocation.getCurrentPosition(
+        position => {
+            geolocationNotice = null;
+            gpsCoords = {
+                lat: position.coords.latitude,
+                lng: position.coords.longitude,
+            };
+            locateButton.disabled = false;
+            performSearch();
+        },
+        error => {
+            gpsCoords = null;
+            locateButton.disabled = false;
+
+            if (error.code === 1) {
+                geolocationNotice = {
+                    text: 'Locatie delen is geweigerd of uitgeschakeld. U kunt een postcode invullen om te zoeken.',
+                    warning: true,
+                };
+            } else if (error.code === 2) {
+                geolocationNotice = {
+                    text: 'Uw locatie is tijdelijk niet beschikbaar. Probeer het later opnieuw of vul een postcode in.',
+                    warning: true,
+                };
+            } else if (error.code === 3) {
+                geolocationNotice = {
+                    text: 'Locatiebepaling duurde te lang. Probeer opnieuw of vul een postcode in.',
+                    warning: true,
+                };
+            } else {
+                geolocationNotice = {
+                    text: 'Uw locatie kon niet worden bepaald. Vul een postcode in.',
+                    warning: true,
+                };
+            }
+
+            performSearch();
+        },
+        {
+            enableHighAccuracy: true,
+            timeout: 15000,
+            maximumAge: 60000,
+        },
+    );
 }
 
 function performSearch() {
@@ -213,6 +295,7 @@ function performSearch() {
     let userCoords = null;
     let shouldShowDistance = false;
     let postcodeSearchState = 'none';
+    let originFromGps = false;
     let results = [...zorgverleners];
 
     if (nameQuery) {
@@ -224,7 +307,9 @@ function performSearch() {
         );
     }
 
-    if (postcodeInput.normalized.length > 0) {
+    const postcodeHasInput = postcodeInput.normalized.length > 0;
+
+    if (postcodeHasInput) {
         if (!postcodeInput.hasValidPrefix) {
             postcodeSearchState = 'invalid';
         } else {
@@ -234,20 +319,20 @@ function performSearch() {
             } else {
                 postcodeSearchState = 'active';
                 shouldShowDistance = true;
-                results = results
-                    .map(provider => ({
-                        ...provider,
-                        distance: haversineDistance(userCoords.lat, userCoords.lng, provider.lat, provider.lng),
-                    }))
-                    .filter(provider => provider.distance <= radiusKm)
-                    .sort((left, right) => left.distance - right.distance);
+                results = applyRadiusFilterAndSort(results, userCoords, radiusKm);
             }
         }
+    } else if (gpsCoords) {
+        postcodeSearchState = 'gps';
+        userCoords = gpsCoords;
+        shouldShowDistance = true;
+        originFromGps = true;
+        results = applyRadiusFilterAndSort(results, userCoords, radiusKm);
     }
 
     updateSearchGuidance(radiusKm, postcodeInput, postcodeSearchState);
-    renderProviders(results, shouldShowDistance, radiusKm);
-    updateProvidersMap(results, userCoords, shouldShowDistance ? radiusKm : null);
+    renderProviders(results, shouldShowDistance, radiusKm, originFromGps);
+    updateProvidersMap(results, userCoords, shouldShowDistance ? radiusKm : null, postcodeSearchState);
 }
 
 function getSelectedRadiusKm() {
@@ -278,11 +363,18 @@ function updateSearchGuidance(radiusKm, postcodeInput, postcodeSearchState) {
 
     info.classList.remove('search-info--warning');
 
+    if (geolocationNotice) {
+        info.classList.toggle('search-info--warning', geolocationNotice.warning);
+        info.textContent = geolocationNotice.text;
+        geolocationNotice = null;
+        return;
+    }
+
     if (postcodeSearchState === 'invalid') {
         info.classList.add('search-info--warning');
         info.textContent =
             'Dit is geen geldige postcode. Gebruik vier cijfers, eventueel met twee letters (bijvoorbeeld 6511 of 6511AB). ' +
-            'Daarna filteren we op de gekozen straal.';
+            'Wis het veld om op afstand vanaf Mijn locatie te zoeken.';
         return;
     }
 
@@ -290,7 +382,7 @@ function updateSearchGuidance(radiusKm, postcodeInput, postcodeSearchState) {
         info.classList.add('search-info--warning');
         info.textContent =
             'Dit postcodegebied (vier cijfers) staat nog niet in onze zoeker. ' +
-            'Probeer een postcode uit de regio Nijmegen–Arnhem e.o. (bijvoorbeeld 6511, 6524 of 6811) of wis het veld om alle zorgverleners te tonen.';
+            'Probeer een postcode uit de regio Nijmegen–Arnhem e.o. (bijvoorbeeld 6511, 6524 of 6811), wis het veld en kies Mijn locatie, of wis het veld om alle zorgverleners te tonen.';
         return;
     }
 
@@ -301,9 +393,17 @@ function updateSearchGuidance(radiusKm, postcodeInput, postcodeSearchState) {
         return;
     }
 
+    if (postcodeSearchState === 'gps') {
+        info.textContent =
+            `Resultaten binnen ${radiusKm} km van uw huidige locatie (benadering op dit apparaat). ` +
+            'Locatie wordt niet opgeslagen. Gesorteerd van dichtbij naar ver; afstand is hemelsbreed (rechte lijn). ' +
+            'Vul een postcode in om in plaats daarvan vanaf dat punt te zoeken.';
+        return;
+    }
+
     info.textContent =
-        `Vul een postcode in om te filteren op afstand. Kies de straal hieronder (${radiusKm} km is de standaard). ` +
-        'Zonder postcode zie je alle zorgverleners (eventueel gefilterd op naam). Afstand wordt hemelsbreed berekend.';
+        `Vul een postcode in of kies Mijn locatie om te filteren op afstand. Kies de straal hieronder (${radiusKm} km is de standaard). ` +
+        'Zonder postcode en zonder locatie ziet u alle zorgverleners (eventueel gefilterd op naam). Afstand wordt hemelsbreed berekend.';
 }
 
 // Haversine formula to calculate distance between two points in km.
@@ -358,7 +458,7 @@ function initProvidersMap() {
     });
 }
 
-function updateProvidersMap(providers, userCoords, radiusKm) {
+function updateProvidersMap(providers, userCoords, radiusKm, postcodeSearchState = 'none') {
     if (!providersMap || !mapLayerGroup || !isMapAvailable) {
         return;
     }
@@ -368,13 +468,14 @@ function updateProvidersMap(providers, userCoords, radiusKm) {
     const mapBounds = [];
 
     if (userCoords) {
+        const originLabel = postcodeSearchState === 'gps' ? 'Uw locatie (benadering)' : 'Zoekpunt (postcode)';
         const searchMarker = L.circleMarker([userCoords.lat, userCoords.lng], {
             radius: 8,
             color: '#1B6B93',
             fillColor: '#1B6B93',
             fillOpacity: 0.95,
             weight: 2,
-        }).bindPopup('Ingevoerde postcode');
+        }).bindPopup(originLabel);
         searchMarker.addTo(mapLayerGroup);
         mapBounds.push([userCoords.lat, userCoords.lng]);
 
@@ -414,7 +515,7 @@ function setMapStatus(message) {
     mapStatus.classList.toggle('visible', message.length > 0);
 }
 
-function renderProviders(providers, showDistance = false, radiusKm = DEFAULT_RADIUS_KM) {
+function renderProviders(providers, showDistance = false, radiusKm = DEFAULT_RADIUS_KM, originFromGps = false) {
     const grid = document.getElementById('providersGrid');
     const noResults = document.getElementById('noResults');
     const resultsCount = document.getElementById('resultsCount');
@@ -424,7 +525,7 @@ function renderProviders(providers, showDistance = false, radiusKm = DEFAULT_RAD
         grid.style.display = 'none';
         noResults.style.display = 'block';
         const zeroNote = showDistance
-            ? `<span class="results-count-note">Geen resultaten binnen ${radiusKm} km. Probeer een grotere straal of een andere postcode.</span>`
+            ? `<span class="results-count-note">Geen resultaten binnen ${radiusKm} km. Verhoog de straal, ${originFromGps ? 'verplaats uzelf en kies opnieuw Mijn locatie' : 'probeer een andere postcode'}, of wis postcode/locatie om alle zorgverleners te tonen.</span>`
             : '';
         resultsCount.innerHTML = `<strong>0</strong> zorgverleners gevonden${zeroNote}`;
         return;
@@ -447,9 +548,13 @@ function renderProviders(providers, showDistance = false, radiusKm = DEFAULT_RAD
             .substring(0, 2)
             .toUpperCase();
 
+        const distanceTitle = originFromGps
+            ? 'Afstand hemelsbreed tot uw huidige locatie (benadering)'
+            : 'Afstand hemelsbreed tot het gekozen postcodegebied';
+
         const distanceBadge =
             showDistance && provider.distance !== undefined
-                ? `<div class="provider-distance-badge" title="Afstand hemelsbreed tot het postcodegebied">
+                ? `<div class="provider-distance-badge" title="${distanceTitle}">
           <span class="provider-distance-badge-km">${provider.distance.toFixed(1)} km</span>
           <span class="provider-distance-badge-hint">hemelsbreed</span>
         </div>`

@@ -998,7 +998,7 @@ ul, ol {
 
 /* ── Zorgverleners Section ── */
 .search-wrapper {
-  max-width: 700px;
+  max-width: 820px;
   margin: 0 auto var(--space-10);
 }
 
@@ -1079,6 +1079,44 @@ ul, ol {
 
 .search-postcode input::placeholder {
   color: var(--color-text-light);
+}
+
+.search-locate-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  flex-shrink: 0;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-white);
+  font-family: var(--font-family);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  color: var(--color-primary);
+  cursor: pointer;
+  transition: background var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
+  white-space: nowrap;
+}
+
+.search-locate-btn:hover {
+  background: rgba(27, 107, 147, 0.06);
+  border-color: var(--color-primary-light);
+}
+
+.search-locate-btn:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.search-locate-btn:disabled {
+  opacity: 0.55;
+  cursor: wait;
+}
+
+.search-locate-btn svg {
+  flex-shrink: 0;
 }
 
 .search-radius {
@@ -1801,6 +1839,12 @@ ul, ol {
     width: 100%;
   }
 
+  .search-locate-btn {
+    width: 100%;
+    justify-content: center;
+    padding: var(--space-3);
+  }
+
   #providersMap {
     height: 340px;
     border-radius: var(--radius-lg);
@@ -1823,6 +1867,10 @@ ul, ol {
 }
 
 @media (max-width: 480px) {
+  .search-locate-label {
+    display: none;
+  }
+
   .hero-title {
     font-size: var(--font-size-3xl);
   }

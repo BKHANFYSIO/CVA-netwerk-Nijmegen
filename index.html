@@ -7,6 +7,7 @@
   <meta name="keywords" content="CVA, beroerte, revalidatie, Nijmegen, zorgnetwerk, fysiotherapie, neurorevalidatie">
   <title>CVA Netwerk Nijmegen – Samen voor optimale zorg na een beroerte</title>
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
 </head>
 <body>
 
@@ -353,9 +354,24 @@
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
             <input type="text" id="searchPostcode" placeholder="Postcode" aria-label="Postcode" maxlength="6">
           </div>
+          <div class="search-radius">
+            <label for="searchRadius" class="sr-only">Straal in kilometer</label>
+            <select id="searchRadius" aria-label="Selecteer straal in kilometer">
+              <option value="2">2 km</option>
+              <option value="5" selected>5 km</option>
+              <option value="10">10 km</option>
+              <option value="15">15 km</option>
+            </select>
+          </div>
           <button class="search-btn" id="searchBtn">Zoeken</button>
         </div>
-        <p class="search-info">Zoekresultaten worden gefilterd op een straal van 5 km rond de ingevoerde postcode</p>
+        <p class="search-info" id="searchInfo">Zoekresultaten worden gefilterd op een straal van 5 km rond de ingevoerde postcode</p>
+        <p class="search-status" id="searchStatus">Afstand wordt hemelsbreed berekend vanaf het midden van de postcode.</p>
+      </div>
+
+      <div class="providers-map-wrapper fade-up">
+        <div id="providersMap" aria-label="Kaart met zorgverleners"></div>
+        <p class="map-status" id="mapStatus" aria-live="polite"></p>
       </div>
 
       <div class="results-count" id="resultsCount"></div>
@@ -492,6 +508,7 @@
   </footer>
 
   <!-- Scripts -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
   <script src="data/zorgverleners.js"></script>
   <script src="data/articles.js"></script>
   <script src="data/links.js"></script>

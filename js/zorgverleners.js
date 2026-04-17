@@ -248,6 +248,10 @@ function requestUserLocation() {
                 lat: position.coords.latitude,
                 lng: position.coords.longitude,
             };
+            const postcodeField = document.getElementById('searchPostcode');
+            if (postcodeField) {
+                postcodeField.value = '';
+            }
             locateButton.disabled = false;
             performSearch();
         },
